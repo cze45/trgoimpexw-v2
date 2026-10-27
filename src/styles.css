@@ -1,0 +1,239 @@
+@import "tailwindcss";
+
+/* ── Tokeni ──────────────────────────────────────────────────
+   Boje su uzete iz logotipa (zelena, bordo) i sa gradilišta
+   (beton, asfalt, šljunak). Nema tamne teme — sajt je svetao. */
+@theme {
+  --color-beton: #e7e8e4;
+  --color-beton-tamni: #d6d7d1;
+  --color-asfalt: #2b2e31;
+  --color-sljunak: #8e8c84;
+  --color-sljunak-svetli: #a9a79f;
+  --color-zelena: #2e5b3f;
+  --color-zelena-tamna: #234832;
+  --color-bordo: #7a2830;
+  --color-belo: #f5f6f3;
+  --color-sivo: #55595c;
+
+  --font-sans: "Archivo", "Arial Narrow", system-ui, sans-serif;
+
+  --breakpoint-xs: 26rem;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-beton);
+    color: var(--color-asfalt);
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    line-height: 1.55;
+    font-stretch: 100%;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  [id] {
+    scroll-margin-top: 1.5rem;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-bordo);
+    outline-offset: 3px;
+  }
+
+  .na-tamnom :focus-visible {
+    outline-color: var(--color-belo);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* ── Tipografija ─────────────────────────────────────────────
+   Jedna porodica (Archivo), razlika je u širini: uzan i težak
+   za naslove kao na logotipu, normalna širina za tekst. */
+@utility tip-naslov {
+  font-stretch: 62%;
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: -0.005em;
+}
+
+@utility tip-h2 {
+  font-stretch: 70%;
+  font-weight: 760;
+  line-height: 0.95;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+@utility tip-h3 {
+  font-stretch: 78%;
+  font-weight: 700;
+  line-height: 1.05;
+  font-size: clamp(1.625rem, 2.6vw, 2rem);
+}
+
+@utility tip-oznaka {
+  font-stretch: 88%;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+}
+
+@utility brojevi {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* ── Materijali ──────────────────────────────────────────────
+   Teksture preseka puta. Iste klase koristi i legenda usluga,
+   pa uzorak u legendi uvek odgovara sloju u preseku. */
+@utility mat-asfalt {
+  background-color: var(--color-asfalt);
+  background-image:
+    radial-gradient(circle at 30% 40%, rgb(255 255 255 / 0.09) 0.8px, transparent 1.4px),
+    radial-gradient(circle at 70% 80%, rgb(0 0 0 / 0.35) 0.8px, transparent 1.4px);
+  background-size:
+    7px 9px,
+    11px 6px;
+}
+
+@utility mat-tampon {
+  background-color: var(--color-sljunak);
+  background-image:
+    radial-gradient(circle at 25% 30%, #6f6d66 2.2px, transparent 2.8px),
+    radial-gradient(circle at 75% 65%, #b3b1a9 1.8px, transparent 2.4px),
+    radial-gradient(circle at 50% 90%, #7c7a73 1.4px, transparent 2px);
+  background-size:
+    17px 14px,
+    13px 19px,
+    9px 11px;
+}
+
+@utility mat-temelj {
+  background-color: var(--color-zelena);
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgb(0 0 0 / 0.22) 0 1.5px,
+    transparent 1.5px 11px
+  );
+}
+
+@utility mat-ograda {
+  background-color: var(--color-beton);
+  background-image:
+    repeating-linear-gradient(45deg, rgb(43 46 49 / 0.55) 0 1px, transparent 1px 11px),
+    repeating-linear-gradient(-45deg, rgb(43 46 49 / 0.55) 0 1px, transparent 1px 11px);
+}
+
+/* ── Presek puta (hero) ──────────────────────────────────────
+   Jedini animirani trenutak na stranici: slojevi se polažu
+   redom kojim se i grade — temelj, tampon, asfalt, pa ograda. */
+.presek-sloj {
+  border-top: 2px solid var(--color-asfalt);
+  animation: polaganje 700ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+.presek-sloj[data-sloj="temelj"] {
+  animation-delay: 150ms;
+}
+.presek-sloj[data-sloj="tampon"] {
+  animation-delay: 450ms;
+}
+.presek-sloj[data-sloj="asfalt"] {
+  animation-delay: 750ms;
+  border-top-width: 4px;
+}
+
+@keyframes polaganje {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.ograda {
+  position: relative;
+  height: clamp(4.5rem, 9vw, 7.5rem);
+  overflow: hidden;
+}
+
+.ograda-telo {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--color-asfalt), var(--color-asfalt)),
+    repeating-linear-gradient(90deg, var(--color-asfalt) 0 6px, transparent 6px 104px),
+    repeating-linear-gradient(45deg, rgb(43 46 49 / 0.5) 0 1px, transparent 1px 11px),
+    repeating-linear-gradient(-45deg, rgb(43 46 49 / 0.5) 0 1px, transparent 1px 11px);
+  background-size:
+    100% 5px,
+    auto,
+    auto,
+    auto;
+  background-position:
+    0 0,
+    0 0,
+    0 0,
+    0 0;
+  background-repeat: no-repeat, repeat, repeat, repeat;
+  animation: podizanje 500ms cubic-bezier(0.2, 0.8, 0.2, 1) 1250ms both;
+}
+
+@keyframes podizanje {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.ograda-oznaka {
+  animation: pojava 300ms ease-out 1650ms both;
+}
+
+@keyframes pojava {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .presek-sloj,
+  .ograda-telo,
+  .ograda-oznaka {
+    animation: none;
+  }
+}
+
+/* Native select: eksplicitne boje (Windows high-contrast/dark) */
+select {
+  background-color: var(--color-belo);
+  color: var(--color-asfalt);
+}
